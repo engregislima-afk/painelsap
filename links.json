@@ -8,7 +8,7 @@
       "name": "Habisolute Analytics",
       "category": "Qualidade",
       "description": "Leitura de certificados, gráficos e relatórios PDF/Excel.",
-      "url": "https://habisolute-analytics-5fsmtupfqnl2ue7gvemryv.streamlit.app/?theme=Claro+corporativo&brand=Laranja&q=",
+      "url": "https://SEU-LINK-DO-ANALYTICS",
       "icon": "📈",
       "tags": ["CP", "FCK", "PDF", "Excel"],
       "status": "online",
@@ -19,22 +19,33 @@
       "name": "Agendamentos de Concretagens",
       "category": "Operação",
       "description": "Agenda, serviços, caminhões, formas e auditoria.",
-      "url": "https://agendamentos-concretagens-ane9smpe2wr5dhsooe5lg3.streamlit.app/",
+      "url": "https://SEU-LINK-DO-AGENDAMENTO",
       "icon": "📅",
       "tags": ["Agenda", "Concreto", "Formas"],
       "status": "online",
       "favorite": true
     },
     {
-      "id": "Ruptura de Argamassa",
-      "name": "Argamassas",
+      "id": "os",
+      "name": "OS / Ordens de Serviço",
       "category": "Operação",
-      "description": "Sistema de Ruptura de Argamassa.",
-      "url": "https://habisolute-aragamassa-te5cvb8xctbu6qr5t8cn5f.streamlit.app/",
+      "description": "Cadastro de obras/serviços e emissão de OS.",
+      "url": "https://SEU-LINK-DO-OS",
       "icon": "🧾",
       "tags": ["OS", "Clientes", "PDF"],
       "status": "manutencao",
       "favorite": false
     },
     {
-  
+      "id": "financeiro",
+      "name": "Financeiro",
+      "category": "Admin",
+      "description": "Contas a pagar/receber, bancos e fluxo.",
+      "url": "https://SEU-LINK-DO-FINANCEIRO",
+      "icon": "💰",
+      "tags": ["Boletos", "Caixa", "Protesto"],
+      "status": "offline",
+      "favorite": false
+    }
+  ]
+}
