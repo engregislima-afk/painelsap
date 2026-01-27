@@ -37,15 +37,4 @@
       "favorite": false
     },
     {
-      "id": "Sistema de Equipamentos",
-      "name": "Equipamentos de Pbra",
-      "category": "Admin",
-      "description": "Contas a pagar/receber, bancos e fluxo.",
-      "url": "https://regiss-app-urn0.glide.page/dl/d0a5f4",
-      "icon": "💰",
-      "tags": ["Laboratoista em Obra", "Reposições",],
-      "status": "offline",
-      "favorite": false
-    }
-  ]
-}
+  
