@@ -1,0 +1,51 @@
+{
+  "app_name": "Habisolute | Painel Central",
+  "subtitle": "Portal de Sistemas (SAP-like)",
+  "owner": "Habisolute Engenharia e Controle Tecnológico",
+  "items": [
+    {
+      "id": "analytics",
+      "name": "Habisolute Analytics",
+      "category": "Qualidade",
+      "description": "Leitura de certificados, gráficos e relatórios PDF/Excel.",
+      "url": "https://SEU-LINK-DO-ANALYTICS",
+      "icon": "📈",
+      "tags": ["CP", "FCK", "PDF", "Excel"],
+      "status": "online",
+      "favorite": true
+    },
+    {
+      "id": "agendamentos",
+      "name": "Agendamentos de Concretagens",
+      "category": "Operação",
+      "description": "Agenda, serviços, caminhões, formas e auditoria.",
+      "url": "https://SEU-LINK-DO-AGENDAMENTO",
+      "icon": "📅",
+      "tags": ["Agenda", "Concreto", "Formas"],
+      "status": "online",
+      "favorite": true
+    },
+    {
+      "id": "os",
+      "name": "OS / Ordens de Serviço",
+      "category": "Operação",
+      "description": "Cadastro de obras/serviços e emissão de OS.",
+      "url": "https://SEU-LINK-DO-OS",
+      "icon": "🧾",
+      "tags": ["OS", "Clientes", "PDF"],
+      "status": "manutencao",
+      "favorite": false
+    },
+    {
+      "id": "financeiro",
+      "name": "Financeiro",
+      "category": "Admin",
+      "description": "Contas a pagar/receber, bancos e fluxo.",
+      "url": "https://SEU-LINK-DO-FINANCEIRO",
+      "icon": "💰",
+      "tags": ["Boletos", "Caixa", "Protesto"],
+      "status": "offline",
+      "favorite": false
+    }
+  ]
+}
