@@ -41,7 +41,6 @@ def inject_css():
     st.markdown(
         """
         <style>
-        /* Base spacing */
         .block-container { padding-top: 1.2rem; padding-bottom: 2.2rem; max-width: 1400px; }
 
         /* Sidebar */
@@ -83,7 +82,7 @@ def inject_css():
         .dot.maint{ background: rgba(234,179,8,1); }
         .dot.info{ background: rgba(59,130,246,1); }
 
-        /* CARD CLICKABLE WRAPPER */
+        /* Clickable card link wrapper */
         .hb-card-link{
             text-decoration: none !important;
             color: inherit !important;
@@ -94,7 +93,7 @@ def inject_css():
         .hb-card{
             position: relative;
             border-radius: 18px;
-            padding: 14px 14px 12px 14px;
+            padding: 14px 14px 14px 14px;
             border: 1px solid rgba(2,6,23,0.10);
             background:
               radial-gradient(900px 200px at 10% 0%, rgba(249,115,22,0.14), transparent 55%),
@@ -102,6 +101,7 @@ def inject_css():
             box-shadow: 0 14px 40px rgba(2,6,23,0.06);
             transition: transform .14s ease, box-shadow .14s ease, border-color .14s ease;
             height: 100%;
+            cursor: pointer;
         }
         .hb-card:hover{
             transform: translateY(-2px);
@@ -133,32 +133,6 @@ def inject_css():
         .hb-badge.offline{ background: rgba(239,68,68,0.08); border-color: rgba(239,68,68,0.24); }
         .hb-badge.manutencao{ background: rgba(234,179,8,0.14); border-color: rgba(234,179,8,0.28); }
         .hb-badge.info{ background: rgba(59,130,246,0.10); border-color: rgba(59,130,246,0.22); }
-
-        /* Hover button: hidden by default, appears on hover */
-        .hb-open-wrap{
-            margin-top: 10px;
-            opacity: 0;
-            transform: translateY(-2px);
-            transition: opacity .14s ease, transform .14s ease;
-        }
-        .hb-card:hover .hb-open-wrap{
-            opacity: 1;
-            transform: translateY(0px);
-        }
-        .hb-open-btn{
-            width: 100%;
-            border-radius: 14px;
-            padding: 10px 12px;
-            text-align: center;
-            font-weight: 700;
-            border: 1px solid rgba(2,6,23,0.10);
-            background: rgba(255,255,255,0.82);
-            box-shadow: 0 12px 28px rgba(2,6,23,0.08);
-        }
-        .hb-open-btn:hover{
-            border-color: rgba(249,115,22,0.35);
-        }
-
         </style>
         """,
         unsafe_allow_html=True,
@@ -266,7 +240,7 @@ def render_top(meta: Dict[str, Any], total: int, shown: int, s_online: int, s_ma
     )
 
 
-# ✅ CARD: clicável + botão só no hover
+# ✅ CARD: clicável, clean (sem botão / sem código aparecendo)
 def render_card(item: LinkItem, do_healthcheck: bool = False):
     badge_class = item.status if item.status in ["online", "offline", "manutencao"] else "info"
     badge_text = status_label(item.status)
@@ -278,44 +252,31 @@ def render_card(item: LinkItem, do_healthcheck: bool = False):
             ok, code = res
             hc_text = f" • HTTP {code}" if ok else " • sem resposta"
 
-    # Se não tiver URL, não faz card clicável
     href_open = item.url if (item.url and item.url.startswith("http")) else None
-    link_open = f'<a class="hb-card-link" href="{href_open}" target="_blank" rel="noopener noreferrer">' if href_open else '<div class="hb-card-link">'
-    link_close = "</a>" if href_open else "</div>"
-
-    # Dentro do card a gente coloca um "Abrir" que só aparece no hover
-    open_btn_html = ""
     if href_open:
-        open_btn_html = f"""
-            <div class="hb-open-wrap">
-                <div class="hb-open-btn">Abrir</div>
-            </div>
-        """
+        open_tag = f'<a class="hb-card-link" href="{href_open}" target="_blank" rel="noopener noreferrer">'
+        close_tag = "</a>"
+    else:
+        open_tag = '<div class="hb-card-link">'
+        close_tag = "</div>"
 
     st.markdown(
-        f"""
-        {link_open}
-            <div class="hb-card">
-                <div class="hb-row">
-                    <div style="display:flex; gap:12px; align-items:center;">
-                        <div class="hb-icon">{item.icon}</div>
-                        <div>
-                            <div class="hb-name">{item.name}</div>
-                            <div class="hb-cat">{item.category}</div>
-                        </div>
-                    </div>
-                    <div class="hb-badge {badge_class}">{badge_text}{hc_text}</div>
-                </div>
-                {open_btn_html}
-            </div>
-        {link_close}
-        """,
+        f"""{open_tag}
+<div class="hb-card">
+  <div class="hb-row">
+    <div style="display:flex; gap:12px; align-items:center;">
+      <div class="hb-icon">{item.icon}</div>
+      <div>
+        <div class="hb-name">{item.name}</div>
+        <div class="hb-cat">{item.category}</div>
+      </div>
+    </div>
+    <div class="hb-badge {badge_class}">{badge_text}{hc_text}</div>
+  </div>
+</div>
+{close_tag}""",
         unsafe_allow_html=True,
     )
-
-    # Fallback se não tiver URL
-    if not href_open:
-        st.button("Sem link", disabled=True, use_container_width=True)
 
     st.write("")
 
@@ -328,7 +289,6 @@ def main():
     st.sidebar.caption("Edite o arquivo links.json no GitHub para adicionar/remover sistemas.")
 
     links_path = st.sidebar.text_input("Arquivo de links", value="links.json")
-    do_healthcheck = ui_toggle("Checar disponibilidade (rápido)", value=False)
     only_favorites = ui_toggle("Somente favoritos", value=False)
 
     # Load
@@ -350,7 +310,6 @@ def main():
     with colC:
         sort_mode = st.selectbox("Ordenar", options=["Favoritos primeiro", "Categoria > Nome", "Nome"], index=0)
 
-    # match
     def match(item: LinkItem) -> bool:
         if only_favorites and not item.favorite:
             return False
@@ -384,7 +343,6 @@ def main():
 
     filtered = [i for i in items if match(i)]
 
-    # sort
     if sort_mode == "Nome":
         filtered.sort(key=lambda x: (x.name or "").lower())
     elif sort_mode == "Categoria > Nome":
@@ -392,7 +350,6 @@ def main():
     else:
         filtered.sort(key=lambda x: (0 if x.favorite else 1, (x.category or "").lower(), (x.name or "").lower()))
 
-    # counts
     s_online = sum(1 for i in filtered if i.status == "online")
     s_man = sum(1 for i in filtered if i.status == "manutencao")
     s_off = sum(1 for i in filtered if i.status == "offline")
@@ -403,11 +360,10 @@ def main():
         st.info("Nenhum sistema encontrado com os filtros atuais.")
         st.stop()
 
-    # Grid
     cols = st.columns(4)
     for idx, item in enumerate(filtered):
         with cols[idx % 4]:
-            render_card(item, do_healthcheck=do_healthcheck)
+            render_card(item)
 
     st.divider()
     st.caption("Habisolute • Painel Central")
