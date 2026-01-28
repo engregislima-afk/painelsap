@@ -70,6 +70,17 @@
       "favorite": true
     },
     {
+      "id": "financeiro",
+      "name": "Financeiro",
+      "category": "Admin",
+      "description": "Contas a pagar/receber, controle de caixa e relatórios financeiros.",
+      "url": "https://v4.egestor.com.br/www/acesse.php?r=L2luaWNpby8%3D",
+      "icon": "💰",
+      "tags": ["Pagamentos", "Boletos", "Caixa"],
+      "status": "online",
+      "favorite": true
+    },
+    {
       "id": "rupturas_cp",
       "name": "Rupturas de Corpos de Prova",
       "category": "Laboratório",
