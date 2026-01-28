@@ -8,7 +8,7 @@
       "name": "Relatórios Analytics",
       "category": "Qualidade",
       "description": "Leitura de certificados, análises, gráficos e emissão de relatórios PDF/Excel.",
-      "url": "https://COLE-AQUI-O-LINK-DO-ANALYTICS",
+      "url": "https://habisolute-analytics-5fsmtupfqnl2ue7gvemryv.streamlit.app/?theme=Claro+corporativo&brand=Laranja&q=",
       "icon": "📊",
       "tags": ["Certificados", "FCK", "PDF", "Excel"],
       "status": "online",
