@@ -4,35 +4,57 @@
   "owner": "Habisolute Engenharia e Controle Tecnológico",
   "items": [
     {
-      "id": "analytics",
-      "name": "Habisolute Analytics",
+      "id": "analytics_relatorios",
+      "name": "Relatórios Analytics",
       "category": "Qualidade",
-      "description": "Leitura de certificados, gráficos e relatórios PDF/Excel.",
-      "url": "https://SEU-LINK-DO-ANALYTICS",
-      "icon": "📈",
-      "tags": ["CP", "FCK", "PDF", "Excel"],
-      "status": "online",
-      "favorite": true
-    },
-    {
-      "id": "agendamentos",
-      "name": "Agendamentos de Concretagens",
-      "category": "Operação",
-      "description": "Agenda, serviços, caminhões, formas e auditoria.",
-      "url": "https://SEU-LINK-DO-AGENDAMENTO",
-      "icon": "📅",
-      "tags": ["Agenda", "Concreto", "Formas"],
+      "description": "Leitura de certificados, análises, gráficos e emissão de relatórios PDF/Excel.",
+      "url": "https://COLE-AQUI-O-LINK-DO-ANALYTICS",
+      "icon": "📊",
+      "tags": ["Certificados", "FCK", "PDF", "Excel"],
       "status": "online",
       "favorite": true
     },
     {
       "id": "os",
-      "name": "OS / Ordens de Serviço",
+      "name": "Sistema de OS",
       "category": "Operação",
-      "description": "Cadastro de obras/serviços e emissão de OS.",
-      "url": "https://SEU-LINK-DO-OS",
+      "description": "Cadastro de obras/serviços e emissão de Ordens de Serviço.",
+      "url": "https://COLE-AQUI-O-LINK-DO-OS",
       "icon": "🧾",
-      "tags": ["OS", "Clientes", "PDF"],
+      "tags": ["OS", "Clientes", "Obras"],
+      "status": "online",
+      "favorite": true
+    },
+    {
+      "id": "argamassa_ruptura",
+      "name": "Ruptura de Argamassa",
+      "category": "Laboratório",
+      "description": "Registro e gestão de ensaios/rupturas de argamassa e relatórios.",
+      "url": "https://COLE-AQUI-O-LINK-DA-ARGAMASSA",
+      "icon": "🧱",
+      "tags": ["Argamassa", "Ensaios", "Relatórios"],
+      "status": "online",
+      "favorite": false
+    },
+    {
+      "id": "agendamentos",
+      "name": "Sistema de Agendamentos",
+      "category": "Operação",
+      "description": "Agendamento de concretagens e serviços (solos, arrancamento, blocos/prismas).",
+      "url": "https://COLE-AQUI-O-LINK-DO-AGENDAMENTOS",
+      "icon": "📅",
+      "tags": ["Agenda", "Concretagem", "Serviços"],
+      "status": "online",
+      "favorite": true
+    },
+    {
+      "id": "equipamentos",
+      "name": "Controle de Equipamentos",
+      "category": "Admin",
+      "description": "Gestão de equipamentos/itens em obra, empréstimos e checklist.",
+      "url": "https://COLE-AQUI-O-LINK-DO-EQUIPAMENTOS",
+      "icon": "🧰",
+      "tags": ["Checklist", "Empréstimo", "Obra"],
       "status": "manutencao",
       "favorite": false
     },
@@ -40,12 +62,23 @@
       "id": "financeiro",
       "name": "Financeiro",
       "category": "Admin",
-      "description": "Contas a pagar/receber, bancos e fluxo.",
-      "url": "https://SEU-LINK-DO-FINANCEIRO",
+      "description": "Contas a pagar/receber, controle de caixa e relatórios financeiros.",
+      "url": "https://COLE-AQUI-O-LINK-DO-FINANCEIRO",
       "icon": "💰",
-      "tags": ["Boletos", "Caixa", "Protesto"],
-      "status": "offline",
-      "favorite": false
+      "tags": ["Pagamentos", "Boletos", "Caixa"],
+      "status": "online",
+      "favorite": true
+    },
+    {
+      "id": "rupturas_cp",
+      "name": "Rupturas de Corpos de Prova",
+      "category": "Laboratório",
+      "description": "Gestão de rompimentos de CP, idades (7/14/21/28/63), rastreio e emissão.",
+      "url": "https://COLE-AQUI-O-LINK-DO-CP",
+      "icon": "🧪",
+      "tags": ["CP", "Ruptura", "Traçabilidade"],
+      "status": "online",
+      "favorite": true
     }
   ]
 }
