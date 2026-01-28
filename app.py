@@ -34,13 +34,6 @@ def ui_toggle(label, value=False, **kwargs):
     return st.checkbox(label, value=value, **kwargs)
 
 
-def ui_link_button(label, url, **kwargs):
-    if hasattr(st, "link_button"):
-        return st.link_button(label, url, **kwargs)
-    st.markdown(f"[{label}]({url})")
-    return None
-
-
 # =========================
 # CSS (Premium / SAP-like)
 # =========================
@@ -90,6 +83,13 @@ def inject_css():
         .dot.maint{ background: rgba(234,179,8,1); }
         .dot.info{ background: rgba(59,130,246,1); }
 
+        /* CARD CLICKABLE WRAPPER */
+        .hb-card-link{
+            text-decoration: none !important;
+            color: inherit !important;
+            display:block;
+        }
+
         /* Card */
         .hb-card{
             position: relative;
@@ -108,6 +108,7 @@ def inject_css():
             box-shadow: 0 22px 55px rgba(2,6,23,0.10);
             border-color: rgba(249,115,22,0.35);
         }
+
         .hb-row{ display:flex; justify-content:space-between; align-items:center; gap: 12px; }
         .hb-icon{
             font-size: 28px;
@@ -133,10 +134,31 @@ def inject_css():
         .hb-badge.manutencao{ background: rgba(234,179,8,0.14); border-color: rgba(234,179,8,0.28); }
         .hb-badge.info{ background: rgba(59,130,246,0.10); border-color: rgba(59,130,246,0.22); }
 
-        /* Buttons */
-        div.stButton>button, a.stLinkButton{
-            border-radius: 14px !important;
+        /* Hover button: hidden by default, appears on hover */
+        .hb-open-wrap{
+            margin-top: 10px;
+            opacity: 0;
+            transform: translateY(-2px);
+            transition: opacity .14s ease, transform .14s ease;
         }
+        .hb-card:hover .hb-open-wrap{
+            opacity: 1;
+            transform: translateY(0px);
+        }
+        .hb-open-btn{
+            width: 100%;
+            border-radius: 14px;
+            padding: 10px 12px;
+            text-align: center;
+            font-weight: 700;
+            border: 1px solid rgba(2,6,23,0.10);
+            background: rgba(255,255,255,0.82);
+            box-shadow: 0 12px 28px rgba(2,6,23,0.08);
+        }
+        .hb-open-btn:hover{
+            border-color: rgba(249,115,22,0.35);
+        }
+
         </style>
         """,
         unsafe_allow_html=True,
@@ -244,7 +266,7 @@ def render_top(meta: Dict[str, Any], total: int, shown: int, s_online: int, s_ma
     )
 
 
-# ✅ CARD CLEAN: só nome + botão Abrir
+# ✅ CARD: clicável + botão só no hover
 def render_card(item: LinkItem, do_healthcheck: bool = False):
     badge_class = item.status if item.status in ["online", "offline", "manutencao"] else "info"
     badge_text = status_label(item.status)
@@ -256,27 +278,43 @@ def render_card(item: LinkItem, do_healthcheck: bool = False):
             ok, code = res
             hc_text = f" • HTTP {code}" if ok else " • sem resposta"
 
+    # Se não tiver URL, não faz card clicável
+    href_open = item.url if (item.url and item.url.startswith("http")) else None
+    link_open = f'<a class="hb-card-link" href="{href_open}" target="_blank" rel="noopener noreferrer">' if href_open else '<div class="hb-card-link">'
+    link_close = "</a>" if href_open else "</div>"
+
+    # Dentro do card a gente coloca um "Abrir" que só aparece no hover
+    open_btn_html = ""
+    if href_open:
+        open_btn_html = f"""
+            <div class="hb-open-wrap">
+                <div class="hb-open-btn">Abrir</div>
+            </div>
+        """
+
     st.markdown(
         f"""
-        <div class="hb-card">
-            <div class="hb-row">
-                <div style="display:flex; gap:12px; align-items:center;">
-                    <div class="hb-icon">{item.icon}</div>
-                    <div>
-                        <div class="hb-name">{item.name}</div>
-                        <div class="hb-cat">{item.category}</div>
+        {link_open}
+            <div class="hb-card">
+                <div class="hb-row">
+                    <div style="display:flex; gap:12px; align-items:center;">
+                        <div class="hb-icon">{item.icon}</div>
+                        <div>
+                            <div class="hb-name">{item.name}</div>
+                            <div class="hb-cat">{item.category}</div>
+                        </div>
                     </div>
+                    <div class="hb-badge {badge_class}">{badge_text}{hc_text}</div>
                 </div>
-                <div class="hb-badge {badge_class}">{badge_text}{hc_text}</div>
+                {open_btn_html}
             </div>
-        </div>
+        {link_close}
         """,
         unsafe_allow_html=True,
     )
 
-    if item.url:
-        ui_link_button("Abrir", item.url, use_container_width=True)
-    else:
+    # Fallback se não tiver URL
+    if not href_open:
         st.button("Sem link", disabled=True, use_container_width=True)
 
     st.write("")
@@ -332,7 +370,6 @@ def main():
 
         if q and q.strip():
             s = q.strip().lower()
-            # busca em nome + categoria + descrição + tags (mesmo que não apareçam)
             blob = " ".join(
                 [
                     item.name or "",
