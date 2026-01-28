@@ -55,8 +55,8 @@
       "url": "https://regiss-app-urn0.glide.page/",
       "icon": "🧰",
       "tags": ["Checklist", "Empréstimo", "Obra"],
-      "status": "manutencao",
-      "favorite": false
+      "status": "online",
+      "favorite": true
     },
     {
       "id": "site",
