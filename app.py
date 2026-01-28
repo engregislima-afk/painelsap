@@ -33,6 +33,7 @@ def ui_toggle(label, value=False, **kwargs):
         return st.toggle(label, value=value, **kwargs)
     return st.checkbox(label, value=value, **kwargs)
 
+
 def ui_link_button(label, url, **kwargs):
     if hasattr(st, "link_button"):
         return st.link_button(label, url, **kwargs)
@@ -41,7 +42,7 @@ def ui_link_button(label, url, **kwargs):
 
 
 # =========================
-# CSS (SAP-like / Premium)
+# CSS (Premium / SAP-like)
 # =========================
 def inject_css():
     st.markdown(
@@ -89,7 +90,7 @@ def inject_css():
         .dot.maint{ background: rgba(234,179,8,1); }
         .dot.info{ background: rgba(59,130,246,1); }
 
-        /* Cards grid */
+        /* Card */
         .hb-card{
             position: relative;
             border-radius: 18px;
@@ -107,7 +108,7 @@ def inject_css():
             box-shadow: 0 22px 55px rgba(2,6,23,0.10);
             border-color: rgba(249,115,22,0.35);
         }
-        .hb-row{ display:flex; justify-content:space-between; align-items:flex-start; gap: 12px; }
+        .hb-row{ display:flex; justify-content:space-between; align-items:center; gap: 12px; }
         .hb-icon{
             font-size: 28px;
             width: 46px; height: 46px;
@@ -118,17 +119,6 @@ def inject_css():
         }
         .hb-name{ margin:0; font-weight: 800; font-size: 15px; line-height: 1.2; }
         .hb-cat{ font-size: 12px; opacity:.70; margin-top: 4px; }
-        .hb-desc{ margin: 10px 0 10px 0; font-size: 12.5px; opacity:.78; min-height: 34px; }
-
-        .hb-tags{ display:flex; flex-wrap:wrap; gap: 6px; margin: 6px 0 10px 0; }
-        .hb-tag{
-            font-size: 11px;
-            padding: 4px 9px;
-            border-radius: 999px;
-            border: 1px solid rgba(2,6,23,0.08);
-            background: rgba(2,6,23,0.03);
-            opacity:.92;
-        }
 
         .hb-badge{
             font-size: 11px;
@@ -254,6 +244,7 @@ def render_top(meta: Dict[str, Any], total: int, shown: int, s_online: int, s_ma
     )
 
 
+# ✅ CARD CLEAN: só nome + botão Abrir
 def render_card(item: LinkItem, do_healthcheck: bool = False):
     badge_class = item.status if item.status in ["online", "offline", "manutencao"] else "info"
     badge_text = status_label(item.status)
@@ -265,15 +256,11 @@ def render_card(item: LinkItem, do_healthcheck: bool = False):
             ok, code = res
             hc_text = f" • HTTP {code}" if ok else " • sem resposta"
 
-    tags_html = ""
-    for t in (item.tags or [])[:8]:
-        tags_html += f'<span class="hb-tag">{t}</span>'
-
     st.markdown(
         f"""
         <div class="hb-card">
             <div class="hb-row">
-                <div style="display:flex; gap:12px; align-items:flex-start;">
+                <div style="display:flex; gap:12px; align-items:center;">
                     <div class="hb-icon">{item.icon}</div>
                     <div>
                         <div class="hb-name">{item.name}</div>
@@ -282,27 +269,17 @@ def render_card(item: LinkItem, do_healthcheck: bool = False):
                 </div>
                 <div class="hb-badge {badge_class}">{badge_text}{hc_text}</div>
             </div>
-
-            <div class="hb-desc">{item.description}</div>
-            <div class="hb-tags">{tags_html}</div>
         </div>
         """,
         unsafe_allow_html=True,
     )
 
-    # actions
-    c1, c2 = st.columns([1.2, 0.8])
-    with c1:
-        if item.url:
-            ui_link_button("Abrir", item.url, use_container_width=True)
-        else:
-            st.button("Sem link", disabled=True, use_container_width=True)
-    with c2:
-        with st.expander("Link", expanded=False):
-            if item.url:
-                st.code(item.url, language=None)
-            else:
-                st.caption("Cadastre a URL no links.json")
+    if item.url:
+        ui_link_button("Abrir", item.url, use_container_width=True)
+    else:
+        st.button("Sem link", disabled=True, use_container_width=True)
+
+    st.write("")
 
 
 def main():
@@ -355,8 +332,17 @@ def main():
 
         if q and q.strip():
             s = q.strip().lower()
-            blob = " ".join([item.name or "", item.description or "", item.category or "", " ".join(item.tags or [])]).lower()
+            # busca em nome + categoria + descrição + tags (mesmo que não apareçam)
+            blob = " ".join(
+                [
+                    item.name or "",
+                    item.category or "",
+                    item.description or "",
+                    " ".join(item.tags or []),
+                ]
+            ).lower()
             return s in blob
+
         return True
 
     filtered = [i for i in items if match(i)]
@@ -380,13 +366,11 @@ def main():
         st.info("Nenhum sistema encontrado com os filtros atuais.")
         st.stop()
 
-    # Responsive columns
-    # (Streamlit doesn't expose viewport size, so we pick a safe layout)
-    cols = st.columns(4)  # 4 cards per row on wide screens
+    # Grid
+    cols = st.columns(4)
     for idx, item in enumerate(filtered):
         with cols[idx % 4]:
             render_card(item, do_healthcheck=do_healthcheck)
-            st.write("")
 
     st.divider()
     st.caption("Habisolute • Painel Central")
